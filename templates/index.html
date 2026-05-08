@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Central - Dashboard</title>
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col">
+    <!-- Sticky Top Navigation -->
+    <nav class="sticky top-0 z-50 bg-slate-900 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl tracking-wide flex items-center gap-2">
+                        <i class="fa-brands fa-amazon text-orange-400"></i> Seller Central
+                    </span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#dashboard" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-slate-700 hover:text-white" data-view="dashboard">Dashboard</a>
+                        <a href="#inventory" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-slate-700 hover:text-white" data-view="inventory">Inventory</a>
+                        <a href="#departments" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-slate-700 hover:text-white" data-view="departments">Departments</a>
+                        <a href="#payments" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-slate-700 hover:text-white" data-view="payments">Payments</a>
+                        <a href="#support" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-slate-700 hover:text-white" data-view="support">Support</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8" id="main-content">
+        <!-- Views will be injected here by app.js -->
+    </main>
+
+    <!-- Modals -->
+    <!-- Add/Edit Product Modal -->
+    <div id="product-modal" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 transition-opacity opacity-0">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md transform scale-95 transition-transform duration-300" id="product-modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold" id="modal-title">Add Product</h3>
+                <button id="close-modal" class="text-slate-500 hover:text-slate-800"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="product-form">
+                <input type="hidden" id="form-mode" value="add">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Product ID / SKU</label>
+                    <input type="text" id="prod-id" class="w-full border border-slate-300 rounded-md p-2 focus:ring-2 focus:ring-slate-900 focus:outline-none" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Name</label>
+                    <input type="text" id="prod-name" class="w-full border border-slate-300 rounded-md p-2 focus:ring-2 focus:ring-slate-900 focus:outline-none" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Category</label>
+                    <select id="prod-category" class="w-full border border-slate-300 rounded-md p-2 focus:ring-2 focus:ring-slate-900 focus:outline-none">
+                        <option>Electronics</option>
+                        <option>Clothing</option>
+                        <option>Home</option>
+                        <option>Sports</option>
+                        <option>Toys</option>
+                        <option>Books</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Price ($)</label>
+                        <input type="number" id="prod-price" step="0.01" min="0" class="w-full border border-slate-300 rounded-md p-2 focus:ring-2 focus:ring-slate-900 focus:outline-none" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Stock</label>
+                        <input type="number" id="prod-stock" min="0" class="w-full border border-slate-300 rounded-md p-2 focus:ring-2 focus:ring-slate-900 focus:outline-none" required>
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-slate-900 text-white font-bold py-2 px-4 rounded hover:bg-slate-800 transition-colors">Save Product</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- POS Modal -->
+    <div id="pos-modal" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 transition-opacity opacity-0">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md transform scale-95 transition-transform duration-300" id="pos-modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold"><i class="fas fa-cash-register mr-2"></i>Process Sale</h3>
+                <button id="close-pos-modal" class="text-slate-500 hover:text-slate-800"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="pos-form">
+                <input type="hidden" id="pos-prod-id">
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-slate-500">Product</p>
+                    <p class="text-lg font-bold text-slate-900" id="pos-prod-name">...</p>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Quantity</label>
+                    <input type="number" id="pos-qty" min="1" value="1" class="w-full border border-slate-300 rounded-md p-2 focus:ring-2 focus:ring-slate-900 focus:outline-none" required>
+                    <p class="text-xs text-slate-500 mt-1">Available: <span id="pos-available"></span></p>
+                </div>
+                <div class="mb-6 bg-slate-50 p-4 rounded-md border border-slate-200">
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>Unit Price:</span>
+                        <span id="pos-price" class="font-medium">$0.00</span>
+                    </div>
+                    <div class="flex justify-between text-lg font-bold border-t border-slate-200 mt-2 pt-2">
+                        <span>Total:</span>
+                        <span id="pos-total">$0.00</span>
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded hover:bg-green-700 transition-colors flex justify-center items-center gap-2">
+                    <i class="fas fa-credit-card"></i> Complete Transaction
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Overlay for ACID transactions -->
+    <div id="loading-overlay" class="fixed inset-0 bg-white/90 hidden items-center justify-center z-[100] flex-col backdrop-blur-sm">
+        <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-slate-900 mb-4"></div>
+        <p class="text-slate-900 font-semibold text-xl tracking-tight" id="loading-text">Processing Transaction...</p>
+        <p class="text-slate-500 text-sm mt-2">Waiting for database confirmation</p>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

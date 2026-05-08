@@ -1,0 +1,64 @@
+/* Custom CSS for additional UI flair beyond Tailwind */
+html {
+    scroll-behavior: smooth;
+}
+
+.nav-link.active {
+    background-color: #334155; /* slate-700 */
+    color: white;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+.toast {
+    animation: slideInRight 0.3s ease-out forwards;
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(100%); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideOutRight {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(100%); }
+}
+
+.toast.hiding {
+    animation: slideOutRight 0.3s ease-in forwards;
+}
+
+/* Card Hover Effects */
+.kpi-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Table styling override for smooth look */
+tbody tr {
+    transition: background-color 0.2s;
+}
+
+/* Red highlight for low stock */
+.low-stock-row {
+    background-color: #fef2f2 !important; /* red-50 */
+}
+.low-stock-row:hover {
+    background-color: #fee2e2 !important; /* red-100 */
+}
+.low-stock-text {
+    color: #ef4444; /* red-500 */
+    font-weight: 600;
+}
