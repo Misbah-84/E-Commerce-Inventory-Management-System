@@ -1,37 +1,60 @@
-# Ecommerce Dashboard (Semester Project)
+# E-Commerce-Inventory-Management-System
 
-This repository contains my semester project: an **Amazon Seller Central style Ecommerce Dashboard**.
+**E-Commerce-Inventory-Management-System** is a professional-grade full-stack suite designed to manage inventory, sales, and analytics. Developed for the **Advanced Database Management System Lab** at the **Institute of Space Technology (IST)**, the system features a custom **HTML5/JavaScript** frontend and a **Python Flask REST API** integrated with **MongoDB Atlas**.
 
-## Overview
-This application provides a full-featured dashboard for an e-commerce platform. It was recently overhauled from Streamlit to a **Flask REST API** backend with a modern **Single Page Application (SPA)** frontend built using **Vanilla JavaScript (ES6+), HTML5, and Tailwind CSS**.
+## 🚀 Key Features
+* **Dashboard:** Real-time KPI metrics (Revenue, Orders, Low Stock Alerts) and visual sales trends using Chart.js.
+* **Inventory Manager:** Searchable and paginated inventory table with the ability to Add/Edit products and process point-of-sale transactions.
+* **Departments:** Product catalog dynamically grouped by category (e.g., Electronics, Home, Toys).
+* **Payments Ledger:** A chronological log of all transactions fetched directly from the database.
+* [cite_start]**ACID Transactions:** Secure sale processing ensuring that the MongoDB database confirms the transaction before the UI reflects the change[cite: 16, 55].
 
-## Key Features
-- **Dashboard**: Real-time KPI metrics (Revenue, Orders, Low Stock Alerts) and visual sales trends using Chart.js.
-- **Inventory Manager**: Searchable and paginated inventory table. Includes the ability to Add/Edit products and process sales (Point of Sale).
-- **Departments**: Product catalog grouped by category.
-- **Payments Ledger**: Chronological log of all transactions fetched directly from the database.
-- **ACID Transactions**: Secure sale processing ensuring that the MongoDB database confirms the transaction before the UI reflects the change.
+## 🛠️ Tech Stack
+* [cite_start]**Database:** MongoDB 7.x (Cloud Cluster hosted on **MongoDB Atlas**)[cite: 39, 83].
+* [cite_start]**Backend:** Python (**Flask**) utilizing the **PyMongo** driver[cite: 40, 41, 84].
+* **Frontend:** **HTML5**, **CSS3 (Tailwind)**, and **Vanilla JavaScript (ES6)** for a professional Single Page Application (SPA) experience.
+* [cite_start]**Analytics:** **Chart.js** for real-time business intelligence reporting[cite: 43].
 
-## Tech Stack
-- **Frontend**: HTML5, Vanilla JavaScript, Tailwind CSS, Chart.js, FontAwesome
-- **Backend**: Python, Flask, Flask-CORS
-- **Database**: MongoDB (via PyMongo)
+## 📁 Project Structure
+The repository is organized into a modular full-stack architecture:
 
-## How to Run Locally
-1. Clone the repository:
+* **📁 Root Directory**
+    * `app.py`: The heart of the backend. Runs the Flask Server and exposes REST API endpoints that connect to MongoDB to fetch data and process ACID transactions.
+    * [cite_start]`requirements.txt`: Lists all Python packages (Flask, Flask-CORS, PyMongo, etc.)[cite: 40, 41].
+    * `README.md`: The front page of the repository containing project details and instructions.
+    * `.gitignore`: Prevents temporary files and environment folders (like `venv/`) from being pushed to GitHub.
+* **📁 templates/**
+    * `index.html`: The main foundation of the frontend (SPA). Includes the layout, top navigation bar, and modal pop-ups.
+* **📁 static/**
+    * **js/app.js:** The brain of the frontend. Handles tab routing, API fetching, and dynamic rendering of Chart.js graphs.
+    * **css/styles.css:** Custom CSS for smooth transitions, KPI card styling, and red-highlighting for low-stock items.
+
+## ⚙️ How to Run Locally
+1. **Clone the repository:**
    ```bash
-   git clone https://github.com/Misbah-84/ecommerce_dashboard.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd ecommerce_dashboard
-   ```
-3. Install the required Python dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Run the Flask server:
-   ```bash
-   python app.py
-   ```
-5. Open your web browser and navigate to `http://127.0.0.1:5000/`.
+   git clone [https://github.com/Misbah-84/E-Commerce-Inventory-Management-System.git](https://github.com/Misbah-84/E-Commerce-Inventory-Management-System.git)
+Install Dependencies:
+
+Bash
+pip install -r requirements.txt
+Configure Database:
+Update the MONGO_URI in app.py with your MongoDB Atlas connection string.
+
+Run Application:
+
+Bash
+python app.py
+Access the App: Open http://127.0.0.1:5000/ in your browser.
+
+👥 Project Team
+
+**Misbah Ullah**
+
+**Muhammad Hamas Khan**
+
+**Mahraib Qaisar Dar**
+
+Submitted To: **Ma'am Shakira Musa Baig**
+
+
+Course: **Advanced Database Management System Lab**
