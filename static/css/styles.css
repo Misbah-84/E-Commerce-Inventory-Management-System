@@ -1,64 +1,254 @@
-/* Custom CSS for additional UI flair beyond Tailwind */
-html {
-    scroll-behavior: smooth;
+/* OmniChannel Retail Hub — Premium Design System & Stylesheet */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --noir: #09090b;
+  --dark: #18181b;
+  --mid: #52525b;
+  --muted: #71717a;
+  --border: #e4e4e7;
+  --bg: #f8f8f8;
+  --white: #fff;
+  --gold: #d4a853;
+  --gold-l: #fef3c7;
+  --gold-d: #b8882a;
+  --red: #ef4444;
+  --green: #22c55e;
+  --sh1: 0 1px 3px rgba(0,0,0,.08);
+  --sh2: 0 4px 12px rgba(0,0,0,.09);
+  --sh3: 0 12px 30px rgba(0,0,0,.12);
+  --sh4: 0 24px 48px rgba(0,0,0,.15);
+  --r: 8px;
+  --rl: 12px;
+  --rxl: 16px;
 }
 
+/* Base Styles */
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg);
+  color: var(--noir);
+}
+
+/* Premium Typography Rules */
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Glassmorphism Navbar */
+.nav-blur {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Brand Text Styling */
+.brand-text {
+  font-family: 'Playfair Display', serif;
+  background: linear-gradient(135deg, var(--gold), var(--gold-d));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Button System */
+.btn-g {
+  background: linear-gradient(135deg, var(--gold), var(--gold-d));
+  color: #fff;
+  border: 1px solid var(--gold-d);
+  box-shadow: 0 2px 8px rgba(212, 168, 83, 0.3);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-g:hover {
+  opacity: 0.95;
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 14px rgba(212, 168, 83, 0.45);
+}
+.btn-g:active {
+  transform: translateY(0);
+}
+
+.btn-d {
+  background: var(--noir);
+  color: #fff;
+  border: 1.5px solid var(--noir);
+  transition: all 0.2s ease;
+}
+.btn-d:hover {
+  background: var(--dark);
+  border-color: var(--dark);
+  transform: translateY(-1px);
+}
+
+.btn-o {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--noir);
+  transition: all 0.2s ease;
+}
+.btn-o:hover {
+  border-color: var(--mid);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Navigation Links */
+.nav-link {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--mid);
+  border-radius: var(--r);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.nav-link:hover {
+  color: var(--noir);
+  background: var(--border);
+}
 .nav-link.active {
-    background-color: #334155; /* slate-700 */
-    color: white;
+  color: var(--gold-d);
+  background: var(--gold-l);
+  font-weight: 600;
+}
+
+/* Hero Section & Glowing Animations */
+.hero-glow {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0a0a0c 0%, #1a1410 50%, #0a0f1a 100%);
+}
+.hero-glow::before {
+  content: '';
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 168, 83, 0.13) 0%, transparent 70%);
+  top: -200px;
+  right: -150px;
+  animation: hglow 22s ease-in-out infinite;
+  pointer-events: none;
+}
+.hero-glow::after {
+  content: '';
+  position: absolute;
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+  bottom: -120px;
+  left: -100px;
+  animation: hglow2 17s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes hglow {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-50px, 40px) scale(1.12); }
+}
+@keyframes hglow2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(40px, -30px); }
 }
 
 /* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.fade-in {
-    animation: fadeIn 0.4s ease-out forwards;
+/* Product & KPI Cards */
+.pc {
+  background: var(--white);
+  border-radius: var(--rl);
+  overflow: hidden;
+  box-shadow: var(--sh1);
+  border: 1px solid var(--border);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.pc:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--sh4);
+  border-color: rgba(212, 168, 83, 0.35);
 }
 
-.toast {
-    animation: slideInRight 0.3s ease-out forwards;
-}
-
-@keyframes slideInRight {
-    from { opacity: 0; transform: translateX(100%); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideOutRight {
-    from { opacity: 1; transform: translateX(0); }
-    to { opacity: 0; transform: translateX(100%); }
-}
-
-.toast.hiding {
-    animation: slideOutRight 0.3s ease-in forwards;
-}
-
-/* Card Hover Effects */
 .kpi-card {
-    transition: transform 0.2s, box-shadow 0.2s;
+  background: var(--white);
+  padding: 1.5rem;
+  border-radius: var(--rl);
+  border: 1px solid var(--border);
+  box-shadow: var(--sh1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 .kpi-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-3px);
+  box-shadow: var(--sh3);
+  border-color: rgba(212, 168, 83, 0.3);
 }
 
-/* Table styling override for smooth look */
-tbody tr {
-    transition: background-color 0.2s;
+/* Custom Table Styles */
+.tbl-row {
+  transition: background-color 0.15s ease;
 }
-
-/* Red highlight for low stock */
+.tbl-row:hover {
+  background-color: var(--bg);
+}
 .low-stock-row {
-    background-color: #fef2f2 !important; /* red-50 */
+  background-color: #fef2f2 !important;
 }
 .low-stock-row:hover {
-    background-color: #fee2e2 !important; /* red-100 */
+  background-color: #fee2e2 !important;
 }
 .low-stock-text {
-    color: #ef4444; /* red-500 */
-    font-weight: 600;
+  color: var(--red);
+  font-weight: 700;
+}
+
+/* Cart Slide-Out Drawer overrides */
+.cart-drawer {
+  transition: transform 0.36s cubic-bezier(0.32, 0.94, 0.6, 1);
+}
+
+/* Performance Lab Results Glow */
+.perf-glow {
+  box-shadow: inset 0 0 15px rgba(34, 197, 94, 0.05), 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Custom Category Pill */
+.cat-pill {
+  display: inline-block;
+  padding: 0.18rem 0.6rem;
+  background: var(--gold-l);
+  color: var(--gold-d);
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 50px;
+}
+
+/* Custom Toast Design */
+.toast-custom {
+  background: var(--noir);
+  color: #fff;
+  border-radius: var(--rl);
+  box-shadow: var(--sh4);
+  border-left: 4px solid var(--gold);
+  transform: translateY(50px);
+  opacity: 0;
+  transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.toast-custom.on {
+  transform: translateY(0);
+  opacity: 1;
 }

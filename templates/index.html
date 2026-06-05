@@ -3,20 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seller Central - Dashboard</title>
-    <!-- Tailwind CSS (CDN) -->
+    <title>OmniChannel Retail Hub — E-Commerce Inventory Management System</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        slate: {
-                            50: '#f8fafc',
-                            100: '#f1f5f9',
-                            800: '#1e293b',
-                            900: '#0f172a',
-                        }
+                        'wn-noir': '#09090b',
+                        'wn-dark': '#18181b',
+                        'wn-mid': '#52525b',
+                        'wn-muted': '#71717a',
+                        'wn-border': '#e4e4e7',
+                        'wn-bg': '#f8f8f8',
+                        'wn-gold': '#d4a853',
+                        'wn-gold-l': '#fef3c7',
+                        'wn-gold-d': '#b8882a'
+                    },
+                    fontFamily: {
+                        'playfair': ['"Playfair Display"', 'serif'],
+                        'inter': ['"Inter"', 'sans-serif']
                     }
                 }
             }
@@ -24,129 +33,225 @@
     </script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/static/css/styles.css">
-    <!-- FontAwesome for icons -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Design Overrides -->
+    <link rel="stylesheet" href="/static/css/styles.css">
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col">
-    <!-- Sticky Top Navigation -->
-    <nav class="sticky top-0 z-50 bg-slate-900 text-white shadow-lg">
+<body class="bg-wn-bg text-wn-noir font-inter antialiased min-h-screen flex flex-col overflow-x-hidden">
+    
+    <!-- Premium Credentials Login Gating Container -->
+    <div id="login-overlay" class="fixed inset-0 z-[9999] hero-glow flex items-center justify-center p-4">
+        <div class="bg-white/95 backdrop-blur-xl border border-white/20 p-8 rounded-3xl shadow-2xl w-full max-w-md transform transition-all duration-300">
+            <div class="text-center mb-8">
+                <span class="text-[9px] tracking-[0.3em] uppercase text-wn-gold-d font-bold block mb-1">E-Commerce Inventory Management System</span>
+                <h2 class="text-3xl font-playfair font-bold italic tracking-tight text-wn-noir">OmniChannel Retail Hub</h2>
+                <p class="text-xs text-wn-muted mt-2">Enter credentials to authenticate secure laboratory sessions</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-wn-dark mb-1">Email Identity</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-wn-muted"><i class="fa-solid fa-envelope text-xs"></i></span>
+                        <input type="email" id="login-email" placeholder="admin@ist.edu.pk" class="w-full pl-9 pr-4 py-2.5 border border-wn-border rounded-xl text-sm focus:border-wn-gold focus:ring-1 focus:ring-wn-gold outline-none font-medium">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-wn-dark mb-1">Secure Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-wn-muted"><i class="fa-solid fa-lock text-xs"></i></span>
+                        <input type="password" id="login-password" placeholder="••••••••" class="w-full pl-9 pr-4 py-2.5 border border-wn-border rounded-xl text-sm focus:border-wn-gold focus:ring-1 focus:ring-wn-gold outline-none font-medium" onkeydown="if(event.key === 'Enter') handleLoginSubmit()">
+                    </div>
+                </div>
+                
+                <button onclick="handleLoginSubmit()" class="w-full btn-g text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 mt-2">
+                    Authenticate Session <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-wn-border/60 text-[10px] text-wn-muted text-center space-y-1.5 bg-wn-bg/40 p-4 rounded-2xl">
+                <span class="font-bold text-wn-dark uppercase block tracking-wider mb-1">Academic Credentials Profile Matrix</span>
+                <div class="flex justify-between font-mono">
+                    <span>🛡️ Admin:</span>
+                    <span class="text-wn-gold-d font-bold">admin@ist.edu.pk / admin123</span>
+                </div>
+                <div class="flex justify-between font-mono">
+                    <span>👤 Customer:</span>
+                    <span class="text-wn-gold-d font-bold">customer@ist.edu.pk / customer123</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Premium Glassmorphic Top Navigation -->
+    <nav class="sticky top-0 z-[600] nav-blur border-b border-wn-border shadow-sm hidden" id="top-navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <div class="flex items-center">
-                    <span class="font-bold text-xl tracking-wide flex items-center gap-2">
-                        <i class="fa-brands fa-amazon text-orange-400"></i> Seller Central
-                    </span>
+                <!-- Brand Brand Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="navigate(currentRole === 'Admin' ? 'insights' : 'marketplace')">
+                    <span class="text-lg font-bold tracking-wider brand-text italic">OmniChannel Retail Hub</span>
                 </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#dashboard" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-slate-700 hover:text-white" data-view="dashboard">Dashboard</a>
-                        <a href="#inventory" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-slate-700 hover:text-white" data-view="inventory">Inventory</a>
-                        <a href="#departments" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-slate-700 hover:text-white" data-view="departments">Departments</a>
-                        <a href="#payments" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-slate-700 hover:text-white" data-view="payments">Payments</a>
-                        <a href="#support" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-slate-700 hover:text-white" data-view="support">Support</a>
+                
+                <!-- Dynamic Navigation Container -->
+                <div class="hidden md:flex items-center space-x-1" id="nav-container">
+                    <!-- Nav tabs injected dynamically in app.js -->
+                </div>
+
+                <!-- Dynamic RBAC Profile and Trigger Action -->
+                <div class="flex items-center gap-4">
+                    <!-- User Credentials Badge -->
+                    <div class="flex items-center gap-2" id="user-profile-badge">
+                        <span class="text-[9px] bg-wn-gold-l text-wn-gold-d border border-wn-gold-d/20 font-mono font-bold px-2 py-1 rounded uppercase" id="badge-role">Admin</span>
+                        <span class="hidden lg:inline text-xs font-semibold text-wn-noir/70 font-mono" id="badge-email">admin@ist.edu.pk</span>
+                        <button onclick="handleLogout()" class="text-[10px] bg-wn-noir hover:bg-wn-dark text-white px-2.5 py-1.5 font-bold rounded-lg transition-colors flex items-center gap-1.5">
+                            <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+                        </button>
                     </div>
+
+                    <!-- Cart Drawer Trigger (Only shown for customer) -->
+                    <button class="relative p-2 text-wn-noir hover:text-wn-gold-d transition-colors" onclick="openCart()" id="cart-trigger">
+                        <i class="fa-solid fa-bag-shopping text-xl"></i>
+                        <span id="cbadge" class="absolute -top-1 -right-1 bg-wn-gold text-white font-extrabold text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center border border-white" style="display: none;">0</span>
+                    </button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content Area -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8" id="main-content">
-        <!-- Views will be injected here by app.js -->
+    <!-- Main Dynamic Interface -->
+    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 hidden" id="main-content">
+        <!-- Dashboard views will be mounted here dynamically via controller app.js -->
     </main>
 
-    <!-- Modals -->
-    <!-- Add/Edit Product Modal -->
-    <div id="product-modal" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 transition-opacity opacity-0">
-        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md transform scale-95 transition-transform duration-300" id="product-modal-content">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold" id="modal-title">Add Product</h3>
-                <button id="close-modal" class="text-slate-500 hover:text-slate-800"><i class="fas fa-times"></i></button>
+    <!-- Slide-Out Shopping Cart Drawer -->
+    <div class="fixed inset-0 z-[700] bg-wn-noir/65 backdrop-blur-[2px] hidden transition-opacity duration-300" id="cart-ov" onclick="closeCart()"></div>
+    <div class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-[800] translate-x-full transition-transform duration-300 ease-in-out flex flex-col" id="cart-dr">
+        <div class="p-6 border-b border-wn-border flex justify-between items-center bg-white">
+            <div>
+                <h3 class="font-playfair font-bold text-xl italic text-wn-noir">Your Bag</h3>
+                <span class="text-xs text-wn-muted" id="cart-cl">0 items selected</span>
             </div>
-            <form id="product-form">
-                <input type="hidden" id="form-mode" value="add">
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Product ID / SKU</label>
-                    <input type="text" id="prod-id" class="w-full border border-slate-300 rounded-md p-2 focus:ring-2 focus:ring-slate-900 focus:outline-none" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Name</label>
-                    <input type="text" id="prod-name" class="w-full border border-slate-300 rounded-md p-2 focus:ring-2 focus:ring-slate-900 focus:outline-none" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Category</label>
-                    <select id="prod-category" class="w-full border border-slate-300 rounded-md p-2 focus:ring-2 focus:ring-slate-900 focus:outline-none">
-                        <option>Electronics</option>
-                        <option>Clothing</option>
-                        <option>Home</option>
-                        <option>Sports</option>
-                        <option>Toys</option>
-                        <option>Books</option>
-                        <option>Other</option>
-                    </select>
-                </div>
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Price ($)</label>
-                        <input type="number" id="prod-price" step="0.01" min="0" class="w-full border border-slate-300 rounded-md p-2 focus:ring-2 focus:ring-slate-900 focus:outline-none" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Stock</label>
-                        <input type="number" id="prod-stock" min="0" class="w-full border border-slate-300 rounded-md p-2 focus:ring-2 focus:ring-slate-900 focus:outline-none" required>
-                    </div>
-                </div>
-                <button type="submit" class="w-full bg-slate-900 text-white font-bold py-2 px-4 rounded hover:bg-slate-800 transition-colors">Save Product</button>
-            </form>
+            <button onclick="closeCart()" class="text-wn-muted hover:text-wn-noir transition-colors bg-wn-bg p-2 rounded-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <!-- Cart Body (Scrollable items container) -->
+        <div class="flex-grow overflow-y-auto p-6 space-y-4" id="cart-body">
+            <div class="text-center py-12 text-wn-muted">
+                <i class="fa-solid fa-bag-shopping text-4xl opacity-20 mb-3 block"></i>
+                <p>Your shopping cart is currently empty.</p>
+            </div>
+        </div>
+        
+        <!-- Cart Footer -->
+        <div class="p-6 border-t border-wn-border bg-wn-bg hidden" id="cart-ft">
+            <div class="flex justify-between items-baseline mb-4">
+                <span class="text-sm text-wn-muted font-medium">Subtotal</span>
+                <span class="text-2xl font-bold font-playfair italic text-wn-noir" id="cart-sub">Rs. 0</span>
+            </div>
+            <p class="text-[10px] text-wn-muted mb-6">Tax calculated at checkout. Real-time ACID guarantees applied to final orders.</p>
+            <button onclick="openCO()" class="w-full btn-g text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2">
+                Proceed to Checkout <i class="fa-solid fa-arrow-right-long"></i>
+            </button>
         </div>
     </div>
 
-    <!-- POS Modal -->
-    <div id="pos-modal" class="fixed inset-0 bg-slate-900/50 hidden items-center justify-center z-50 transition-opacity opacity-0">
-        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md transform scale-95 transition-transform duration-300" id="pos-modal-content">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold"><i class="fas fa-cash-register mr-2"></i>Process Sale</h3>
-                <button id="close-pos-modal" class="text-slate-500 hover:text-slate-800"><i class="fas fa-times"></i></button>
+    <!-- Order Checkout Modal -->
+    <div class="fixed inset-0 bg-wn-noir/70 backdrop-blur-[3px] hidden items-center justify-center z-[900] transition-opacity duration-300" id="com">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="bg-gradient-to-r from-wn-gold to-wn-gold-d p-6 text-white">
+                <h2 class="text-2xl font-playfair font-bold italic">Secure Checkout</h2>
+                <p class="text-xs opacity-90 mt-1">Awaiting atomic ACID commitment from MongoDB Cluster</p>
             </div>
-            <form id="pos-form">
-                <input type="hidden" id="pos-prod-id">
-                <div class="mb-4">
-                    <p class="text-sm font-medium text-slate-500">Product</p>
-                    <p class="text-lg font-bold text-slate-900" id="pos-prod-name">...</p>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Quantity</label>
-                    <input type="number" id="pos-qty" min="1" value="1" class="w-full border border-slate-300 rounded-md p-2 focus:ring-2 focus:ring-slate-900 focus:outline-none" required>
-                    <p class="text-xs text-slate-500 mt-1">Available: <span id="pos-available"></span></p>
-                </div>
-                <div class="mb-6 bg-slate-50 p-4 rounded-md border border-slate-200">
-                    <div class="flex justify-between text-sm mb-1">
-                        <span>Unit Price:</span>
-                        <span id="pos-price" class="font-medium">$0.00</span>
-                    </div>
-                    <div class="flex justify-between text-lg font-bold border-t border-slate-200 mt-2 pt-2">
-                        <span>Total:</span>
-                        <span id="pos-total">$0.00</span>
+            
+            <div class="p-6 overflow-y-auto space-y-6 flex-grow">
+                <!-- Line items summaries -->
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-wn-muted mb-3">Order Summary</h4>
+                    <div class="space-y-2 max-h-40 overflow-y-auto pr-1" id="co-is">
+                        <!-- Line items -->
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded hover:bg-green-700 transition-colors flex justify-center items-center gap-2">
-                    <i class="fas fa-credit-card"></i> Complete Transaction
-                </button>
-            </form>
+
+                <!-- Totals Breakdown -->
+                <div class="bg-wn-bg rounded-xl p-4 space-y-2 border border-wn-border">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-wn-muted">Cart Subtotal</span>
+                        <span class="font-semibold" id="co-sub">Rs. 0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-wn-muted">Tax & Service (8%)</span>
+                        <span class="font-semibold" id="co-tax">Rs. 0</span>
+                    </div>
+                    <div class="flex justify-between text-base border-t border-wn-border pt-2 font-bold font-playfair italic">
+                        <span>Total (PKR)</span>
+                        <span class="text-wn-gold-d text-lg" id="co-tot">Rs. 0</span>
+                    </div>
+                </div>
+
+                <!-- Customer Details Form -->
+                <div class="space-y-4">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-wn-muted">Shipping Information</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase tracking-wider text-wn-dark mb-1">Customer ID</label>
+                            <input type="text" id="co-id" value="CUST-101" disabled class="w-full p-2.5 border border-wn-border rounded-lg bg-wn-bg text-wn-muted cursor-not-allowed text-xs font-mono font-bold">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase tracking-wider text-wn-dark mb-1">Verified Email</label>
+                            <input type="text" id="co-em" value="customer@ist.edu.pk" disabled class="w-full p-2.5 border border-wn-border rounded-lg bg-wn-bg text-wn-muted cursor-not-allowed text-xs font-mono font-bold">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-wn-dark mb-1">Full Name</label>
+                        <input type="text" id="co-nm" placeholder="Enter recipient name" class="w-full p-2.5 border border-wn-border rounded-lg text-sm focus:border-wn-gold focus:ring-1 focus:ring-wn-gold outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-wn-dark mb-1">Delivery Address</label>
+                        <input type="text" id="co-ad" placeholder="e.g. House 4, Sector F-7, Islamabad" class="w-full p-2.5 border border-wn-border rounded-lg text-sm focus:border-wn-gold focus:ring-1 focus:ring-wn-gold outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase tracking-wider text-wn-dark mb-1">Phone Number</label>
+                        <input type="text" id="co-ph" placeholder="e.g. +92 300 1234567" class="w-full p-2.5 border border-wn-border rounded-lg text-sm focus:border-wn-gold focus:ring-1 focus:ring-wn-gold outline-none">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-6 border-t border-wn-border flex gap-3 bg-white">
+                <button onclick="cM('com')" class="flex-1 btn-o py-3 rounded-lg text-sm font-semibold">Cancel</button>
+                <button onclick="placeOrd()" class="flex-[2] btn-g text-white font-bold py-3 rounded-lg text-sm">Place Secure Order ✓</button>
+            </div>
         </div>
     </div>
 
-    <!-- Loading Overlay for ACID transactions -->
-    <div id="loading-overlay" class="fixed inset-0 bg-white/90 hidden items-center justify-center z-[100] flex-col backdrop-blur-sm">
-        <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-slate-900 mb-4"></div>
-        <p class="text-slate-900 font-semibold text-xl tracking-tight" id="loading-text">Processing Transaction...</p>
-        <p class="text-slate-500 text-sm mt-2">Waiting for database confirmation</p>
+    <!-- Generic Admin CRUD Modal Container -->
+    <div id="generic-modal" class="fixed inset-0 bg-wn-noir/65 backdrop-blur-[2px] hidden items-center justify-center z-[900] transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md transform scale-95 transition-transform duration-300" id="generic-modal-content">
+            <div class="flex justify-between items-center mb-5 pb-3 border-b border-wn-border bg-white">
+                <h2 class="text-xl font-playfair font-bold italic text-wn-gold-d" id="modal-title">Title</h2>
+                <button onclick="closeModal()" class="text-wn-muted hover:text-wn-noir transition-colors bg-wn-bg p-2 rounded-lg"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="modal-body" class="bg-white"></div>
+        </div>
     </div>
 
-    <!-- Notification Toast -->
-    <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+    <!-- ACID Guarantee Transaction Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-wn-noir/85 backdrop-blur-md hidden items-center justify-center z-[9999] flex-col opacity-0 transition-opacity duration-300">
+        <div class="relative w-20 h-20 mb-6">
+            <div class="absolute inset-0 rounded-full border-4 border-wn-gold-l opacity-25"></div>
+            <div class="absolute inset-0 rounded-full border-4 border-t-wn-gold border-r-transparent border-b-transparent border-l-transparent animate-spin"></div>
+        </div>
+        <p class="text-white font-playfair font-bold text-3xl tracking-tight italic" id="loading-text">Processing Transaction...</p>
+        <p class="text-wn-gold text-sm mt-3 font-semibold tracking-widest uppercase">Guaranteeing ACID Properties (MongoDB Replica Set)</p>
+        <p class="text-white/40 text-xs mt-1 font-mono">Optimistic Concurrency Stock Isolation · Auto Retry Enabled</p>
+    </div>
 
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[99999] flex flex-col gap-3 pointer-events-none w-80"></div>
+
+    <!-- Core App Logic Controller -->
     <script src="/static/js/app.js"></script>
 </body>
 </html>
